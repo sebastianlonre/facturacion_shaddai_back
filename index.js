@@ -8,19 +8,17 @@ const app = express();
 
 console.log("ahhhhhh");
 
-app.use(cors({
-  origin: SERVER ? [SERVER] : '*',
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
-  allowedHeaders: 'Content-Type,Authorization',
-  credentials: true
-}));
+app.use(cors());
 
-app.options('*', (req, res) => {
-  res.header("Access-Control-Allow-Origin", SERVER || '*');
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", SERVER || "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.sendStatus(200);
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
 });
+
+app.options('*', (req, res) => res.sendStatus(200));
 
 app.get('/niah', (req, res) => res.send('hello world'));
 
